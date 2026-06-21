@@ -1,0 +1,8 @@
+# Flask is the micro web framework used to build our web application, handle routing, and manage requests.
+Flask==3.0.0
+
+# Flask-SQLAlchemy is an extension for Flask that adds support for SQLAlchemy, simplifying database operations.
+flask_sqlalchemy==3.1.1
+
+# SQLAlchemy is the Object-Relational Mapper (ORM) library used for managing SQL databases in Python.
+SQLAlchemy==2.0.25

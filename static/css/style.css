@@ -1,0 +1,408 @@
+/* ==========================================================================
+   CSS Custom Properties (Design Tokens & Color System)
+   ========================================================================== */
+:root {
+  /* Modern Typography - Inter font is loaded via google fonts */
+  --font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+
+  /* Harmonious Dark Mode HSL Color Palette */
+  --bg-gradient-start: hsl(222, 47%, 10%); /* Deep, rich space-blue background */
+  --bg-gradient-end: hsl(224, 30%, 15%);   /* Slightly lighter space-blue shade */
+  --card-bg: rgba(255, 255, 255, 0.03);    /* Highly translucent white for glassmorphism */
+  --card-border: rgba(255, 255, 255, 0.08); /* Soft subtle white border for card containment */
+  --card-blur: 16px;                         /* Background blur radius for frosted-glass effect */
+
+  /* Text Colors */
+  --text-primary: hsl(0, 0%, 98%);          /* Near-white for high contrast headings */
+  --text-secondary: hsl(215, 15%, 75%);      /* Muted gray-blue for descriptions and authors */
+  --text-muted: hsl(215, 10%, 55%);         /* Duller gray-blue for timestamps or minor info */
+
+  /* Semantic Accent Colors */
+  --accent-primary: hsl(263, 70%, 50%);     /* Electric violet for primary highlights and buttons */
+  --accent-secondary: hsl(217, 91%, 60%);   /* Vibrant sky blue for gradients and focus borders */
+  --accent-success: hsl(142, 71%, 45%);     /* Emerald green for positive action and badges */
+  --accent-danger: hsl(346, 84%, 61%);      /* Rose red for destructive actions like delete */
+  --accent-warning: hsl(38, 92%, 50%);      /* Vivid amber for warnings and rating highlight */
+
+  /* Gradients */
+  --primary-gradient: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+  --danger-gradient: linear-gradient(135deg, hsl(346, 84%, 61%) 0%, hsl(355, 78%, 56%) 100%);
+
+  /* Animation Transitions */
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Layout Constants */
+  --max-width: 800px;                       /* Consistent content container width constraint */
+  --border-radius-lg: 16px;                 /* Outer card & modal corners */
+  --border-radius-md: 10px;                 /* Button & input element corners */
+}
+
+/* ==========================================================================
+   Global Reset & Base Styles
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box; /* Set box sizing model to border-box to include padding/borders in size */
+  margin: 0;             /* Reset default margins */
+  padding: 0;            /* Reset default padding */
+}
+
+body {
+  font-family: var(--font-family);          /* Apply premium typography system */
+  background: linear-gradient(185deg, var(--bg-gradient-start), var(--bg-gradient-end)); /* Subtle background diagonal gradient */
+  background-attachment: fixed;              /* Lock gradient in place during scrolling */
+  color: var(--text-primary);               /* Default text color */
+  min-height: 100vh;                         /* Make sure the page is at least full height */
+  line-height: 1.6;                          /* Clean, highly readable line height */
+  -webkit-font-smoothing: antialiased;       /* Smooth font rendering on Webkit browsers */
+  -moz-osx-font-smoothing: grayscale;        /* Smooth font rendering on macOS Firefox */
+  padding: 2rem 1rem;                        /* Padding around the viewport edges */
+}
+
+/* ==========================================================================
+   Layout Containers
+   ========================================================================== */
+.container {
+  width: 100%;
+  max-width: var(--max-width);             /* Restrain width to keep items readable and centered */
+  margin: 0 auto;                          /* Center container in the viewport horizontally */
+  padding: 2rem;
+  background: var(--card-bg);              /* Glassmorphism translucent fill */
+  backdrop-filter: blur(var(--card-blur)); /* Backdrop filter to blur elements underneath the glass container */
+  -webkit-backdrop-filter: blur(var(--card-blur)); /* Safari compatibility for backdrop blur */
+  border: 1px solid var(--card-border);    /* Crisp outer containment line */
+  border-radius: var(--border-radius-lg);  /* Generous rounded corners */
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); /* Drop shadow to float container above background */
+  animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1); /* Animate fade in on initial page render */
+}
+
+header {
+  margin-bottom: 2rem;                     /* Separate header from main content grid */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* Divider under header area */
+  padding-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;          /* Align title to left, secondary links to right */
+  align-items: center;                     /* Vertical centering alignment */
+}
+
+h1 {
+  font-size: 2.25rem;                      /* Bold, premium typography sizing */
+  font-weight: 800;                        /* Heavy weight for headings */
+  background: linear-gradient(90deg, var(--text-primary) 0%, var(--text-secondary) 100%); /* Elegant metallic gradient text */
+  -webkit-background-clip: text;           /* Restrict gradient to text glyphs only */
+  -webkit-text-fill-color: transparent;    /* Make solid text color transparent to let gradient show */
+  letter-spacing: -0.025em;                /* Tighter character spacing for modern look */
+}
+
+/* ==========================================================================
+   Buttons and Links
+   ========================================================================== */
+.btn {
+  display: inline-flex;                     /* Flexible content centering inside buttons */
+  align-items: center;                      /* Center button text/icons vertically */
+  justify-content: center;                  /* Center button text/icons horizontally */
+  padding: 0.75rem 1.5rem;                  /* Comfortable padding for touch targets */
+  font-family: inherit;                     /* Ensure font family is inherited */
+  font-size: 0.95rem;                       /* Balanced font sizing */
+  font-weight: 600;                         /* Medium-bold text weighting */
+  text-decoration: none;                    /* Strip default underline from link-based buttons */
+  border-radius: var(--border-radius-md);   /* Styled rounded borders */
+  cursor: pointer;                          /* Pointer cursor on hover */
+  transition: all var(--transition-normal); /* Smooth interactive transition triggers */
+  border: none;                             /* Reset browser default borders */
+}
+
+.btn-primary {
+  background: var(--primary-gradient);      /* Gradient fill across the button */
+  color: #fff;                              /* High contrast text */
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3); /* Subtle colored drop shadow for depth */
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);              /* Gentle lift on hover interaction */
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5); /* Intensified shadow state */
+  filter: brightness(1.1);                  /* Make gradient slightly brighter */
+}
+
+.btn-primary:active {
+  transform: translateY(0);                 /* Reset lift when clicked */
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.05);    /* Muted translucent background */
+  color: var(--text-primary);               /* White text label */
+  border: 1px solid var(--card-border);     /* Fine border line */
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);     /* Brighten translucent background on hover */
+  border-color: rgba(255, 255, 255, 0.2);   /* Elevate border opacity on hover */
+}
+
+/* ==========================================================================
+   Alerts and Flash Messages
+   ========================================================================== */
+.alert-container {
+  margin-bottom: 1.5rem;                    /* Push content below alert container down */
+}
+
+.alert {
+  padding: 1rem 1.25rem;
+  border-radius: var(--border-radius-md);   /* Rounded container matches inputs */
+  font-size: 0.95rem;                       /* Clean font sizing for notifications */
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;                      /* Center align icons and text layout */
+  background: rgba(244, 63, 94, 0.1);      /* High-transparency red backing for warnings */
+  border: 1px solid rgba(244, 63, 94, 0.25); /* Border bounding line in theme color */
+  color: var(--accent-danger);              /* Red warning text style */
+  animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1); /* Slide-in animation for alert items */
+}
+
+.alert-error {
+  background: rgba(244, 63, 94, 0.08);     /* Translucent red warning */
+  border-color: rgba(244, 63, 94, 0.2);
+  color: hsl(346, 100%, 75%);
+}
+
+.alert-success {
+  background: rgba(16, 185, 129, 0.08);     /* Translucent green confirmation */
+  border-color: rgba(16, 185, 129, 0.2);
+  color: hsl(142, 100%, 75%);
+}
+
+/* ==========================================================================
+   Book Grid and List Items
+   ========================================================================== */
+.books-list {
+  list-style: none;                         /* Eliminate native browser bullets */
+  display: grid;
+  grid-template-columns: 1fr;               /* Single-column grid structure by default */
+  gap: 1rem;                                /* Grid cell spacing gutter */
+  margin-bottom: 2rem;
+}
+
+.book-card {
+  background: rgba(255, 255, 255, 0.02);    /* Very light container background */
+  border: 1px solid var(--card-border);     /* Card structural boundary border */
+  border-radius: var(--border-radius-md);   /* Subtle rounded corners */
+  padding: 1.25rem 1.5rem;                  /* Internal card content padding space */
+  display: flex;                            /* Flexible inline item layout alignment */
+  justify-content: space-between;          /* Spread text container and actions apart */
+  align-items: center;                      /* Align everything vertically centered */
+  transition: all var(--transition-fast);   /* Interactive trigger animations */
+}
+
+.book-card:hover {
+  background: rgba(255, 255, 255, 0.04);    /* Hover highlight state illumination */
+  border-color: rgba(255, 255, 255, 0.15);  /* Enhance border definition */
+  transform: translateX(4px);               /* Micro-animation shifting card slightly right */
+}
+
+.book-info {
+  display: flex;
+  flex-direction: column;                   /* Stack title, author, and rating details vertically */
+  gap: 0.25rem;
+}
+
+.book-title {
+  font-size: 1.15rem;                       /* Clean font sizing for book titles */
+  font-weight: 700;                         /* Heavy typeface styling */
+  color: var(--text-primary);
+}
+
+.book-author {
+  font-size: 0.9rem;                        /* Subtle author labelling size */
+  color: var(--text-secondary);             /* Slightly faded color */
+  font-style: italic;                       /* Italic font style for distinct design */
+}
+
+.book-meta {
+  display: flex;
+  align-items: center;                      /* Align rating layout elements */
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.rating-badge {
+  background: rgba(245, 158, 11, 0.1);      /* Amber transparency highlights for rating number */
+  border: 1px solid rgba(245, 158, 11, 0.25); /* Accent bounding border line */
+  color: var(--accent-warning);             /* Amber colored text */
+  padding: 0.15rem 0.6rem;
+  border-radius: 20px;                      /* Fully pill-shaped badge styling */
+  font-size: 0.8rem;                        /* Compact badge text */
+  font-weight: 700;
+}
+
+.empty-state {
+  text-align: center;                       /* Center text in placeholder elements */
+  padding: 3rem 1.5rem;
+  color: var(--text-muted);                 /* Light muted gray labels */
+  border: 2px dashed rgba(255, 255, 255, 0.05); /* Dashed frame outlining empty container area */
+  border-radius: var(--border-radius-md);
+  margin-bottom: 2rem;
+}
+
+/* Actions Section inside cards */
+.book-actions {
+  display: flex;                            /* Flexible inline align action items */
+  gap: 0.75rem;                             /* Spacing gutter between action items */
+}
+
+.action-link {
+  font-size: 0.85rem;                       /* Muted functional link typography */
+  font-weight: 600;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;                       /* Tighter rounded elements inside cards */
+}
+
+.action-edit {
+  color: var(--accent-secondary);           /* Sky blue action text */
+  background: rgba(59, 130, 246, 0.08);     /* Translucent blue layout background */
+}
+
+.action-edit:hover {
+  background: rgba(59, 130, 246, 0.18);     /* Muted hover background boost */
+  color: hsl(217, 100%, 75%);               /* Glow color enhancement */
+}
+
+.action-delete {
+  color: var(--accent-danger);              /* Danger alert pink-red */
+  background: rgba(244, 63, 94, 0.08);      /* Light pink background bounding actions */
+}
+
+.action-delete:hover {
+  background: rgba(244, 63, 94, 0.18);      /* Deepen background presence */
+  color: hsl(346, 100%, 75%);               /* Brighten text color */
+}
+
+/* ==========================================================================
+   Forms and Input Fields
+   ========================================================================== */
+.form-group {
+  margin-bottom: 1.5rem;                    /* Spacious spacing layout separating fields */
+  display: flex;
+  flex-direction: column;                   /* Direct input labels stacked above the elements */
+  gap: 0.5rem;
+}
+
+label {
+  font-size: 0.9rem;                        /* Legible labelling system */
+  font-weight: 600;
+  color: var(--text-secondary);             /* Soft contrast color labels */
+  letter-spacing: 0.025em;
+  text-transform: uppercase;                /* Sophisticated small capital layout headers */
+}
+
+/* Styling native HTML text inputs and number controls */
+input[type="text"],
+input[type="number"] {
+  width: 100%;                              /* Make inputs match container widths */
+  padding: 0.85rem 1rem;                    /* Generous comfortable input spacing heights */
+  background: rgba(255, 255, 255, 0.03);    /* High transparency backing overlay */
+  border: 1px solid var(--card-border);     /* Frame bounding lines */
+  border-radius: var(--border-radius-md);   /* Smooth rounded elements */
+  color: var(--text-primary);               /* White colored inputs */
+  font-family: inherit;
+  font-size: 1rem;
+  transition: all var(--transition-fast);
+  outline: none;                            /* Strip native browser outlines */
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus {
+  background: rgba(255, 255, 255, 0.06);    /* Slightly brighter context selection glow */
+  border-color: var(--accent-secondary);    /* Change borders to bright cyan-blue */
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15); /* Ring glow surrounding elements */
+}
+
+input::placeholder {
+  color: var(--text-muted);                 /* Muted gray indicators */
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;                                /* Grid gap split between action buttons */
+  justify-content: flex-end;               /* Align form submission buttons to the right */
+  margin-top: 2rem;
+}
+
+/* Back Link text styles */
+.back-link {
+  display: inline-flex;
+  align-items: center;                      /* Align navigation back icon block */
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: color var(--transition-fast);
+}
+
+.back-link:hover {
+  color: var(--text-primary);               /* Elevate text state highlight */
+}
+
+/* ==========================================================================
+   CSS Animations
+   ========================================================================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);            /* Soft shift upward on load */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);            /* Push slide starting point above */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================================================
+   Responsive Media Queries
+   ========================================================================== */
+@media (max-width: 600px) {
+  body {
+    padding: 1rem 0.5rem;                   /* Compress page bounding gutter for small viewports */
+  }
+  
+  .container {
+    padding: 1.5rem 1rem;                   /* Compress containers internally */
+  }
+  
+  header {
+    flex-direction: column;                 /* Header splits vertically on small screens */
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .book-card {
+    flex-direction: column;                 /* Collapse cards layout vertically */
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
+  
+  .book-actions {
+    width: 100%;
+    justify-content: flex-end;              /* Push quick links to far right side of screens */
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;          /* Reorient confirmation flows vertically on mobile */
+  }
+  
+  .btn {
+    width: 100%;                            /* Expand call-to-actions to take full screen width */
+  }
+}

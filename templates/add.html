@@ -1,0 +1,105 @@
+<!-- Declares standard HTML5 page document structure -->
+<!DOCTYPE html>
+<!-- Configure document language attribute for accessibility -->
+<html lang="en">
+  <!-- Head section stores document titles, viewport configurations, styles, and font files -->
+  <head>
+    <!-- Specify document character set format -->
+    <meta charset="UTF-8" />
+    <!-- Enable mobile viewport configurations to support responsive screen sizes -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Page title displaying on browser tab header -->
+    <title>Add Book - My Bookshelf</title>
+    <!-- Connect Google fonts CDN for premium, modern typography styles -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <!-- Import custom Vanilla CSS styles dynamically via Flask routing engine -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  </head>
+  <!-- Body defines the actual visual framework visible on screen -->
+  <body>
+    <!-- Center panel styled with frosted-glass aesthetic wrappers -->
+    <div class="container" id="add-form-container">
+      <!-- Layout header displaying gradient titles -->
+      <header id="form-header">
+        <h1 id="form-title">Add New Book</h1>
+      </header>
+
+      <!-- Main action section of form context -->
+      <main id="form-content">
+        <!-- Render contextual status alerts using Jinja2 flash engine blocks -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          <!-- Check if messages list contains active warnings logged by context -->
+          {% if messages %}
+            <!-- Outer grid container wrapping alerts -->
+            <div class="alert-container" id="alert-messages-block">
+              <!-- Loop over flashed messages, unpacking category type and context details -->
+              {% for category, message in messages %}
+                <!-- Render active alerts styled by alert status class variables -->
+                <div class="alert alert-{{ category }}" role="alert">
+                  {{ message }}
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <!-- Form context pointing to addition endpoint handler via HTTP POST verb -->
+        <form action="{{ url_for('add') }}" method="POST" id="add-book-form">
+          <!-- Input group for book title properties -->
+          <div class="form-group">
+            <label for="book-title-input">Book Title</label>
+            <!-- Text input capturing title, with required tag, placeholder, and autocomplete disabled -->
+            <input 
+              name="title" 
+              type="text" 
+              id="book-title-input" 
+              placeholder="e.g., The Great Gatsby" 
+              required 
+              autocomplete="off" 
+            />
+          </div>
+
+          <!-- Input group for writing author properties -->
+          <div class="form-group">
+            <label for="book-author-input">Author Name</label>
+            <!-- Text input capturing author name with HTML5 client-side validation tags -->
+            <input 
+              name="author" 
+              type="text" 
+              id="book-author-input" 
+              placeholder="e.g., F. Scott Fitzgerald" 
+              required 
+              autocomplete="off" 
+            />
+          </div>
+
+          <!-- Input group for rating evaluations -->
+          <div class="form-group">
+            <label for="book-rating-input">Rating (0 - 10)</label>
+            <!-- Number input forcing valid numeric floats, constraining value bounds -->
+            <input 
+              name="rating" 
+              type="number" 
+              id="book-rating-input" 
+              min="0" 
+              max="10" 
+              step="0.1" 
+              placeholder="e.g., 8.5" 
+              required 
+            />
+          </div>
+
+          <!-- Horizontal container alignment for cancellation and submission controls -->
+          <div class="form-actions">
+            <!-- Secondary action back link, enabling seamless cancel exits -->
+            <a href="{{ url_for('home') }}" class="btn btn-secondary" id="cancel-btn">Cancel</a>
+            <!-- Main CTA submitting form inputs to application backend handlers -->
+            <button type="submit" class="btn btn-primary" id="submit-btn">Add Book</button>
+          </div>
+        </form>
+      </main>
+    </div>
+  </body>
+</html>

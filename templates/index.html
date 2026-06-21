@@ -1,0 +1,94 @@
+<!-- Define document type as modern HTML5 standard -->
+<!DOCTYPE html>
+<!-- Declare page language as English for translation engines and screen readers -->
+<html lang="en">
+  <!-- Head section stores document metadata, viewport setups, stylesheets, and font links -->
+  <head>
+    <!-- Specify character encoding to handle international characters accurately -->
+    <meta charset="UTF-8" />
+    <!-- Ensure responsive scaling on mobile screens and tablets -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Add metadata descriptions for better Search Engine Optimization (SEO) ranking -->
+    <meta name="description" content="My Bookshelf - A premium personal library catalog manager to track, edit, and review your read books." />
+    <!-- Declare page title displayed on browser tabs -->
+    <title>My Bookshelf - Library Catalog</title>
+    <!-- Connect Google Fonts to fetch the premium, clean sans-serif typography (Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <!-- Load custom Vanilla CSS style sheet dynamically using Flask's static assets router -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  </head>
+  <!-- Body defines the visible document structure containing all page layouts -->
+  <body>
+    <!-- Center panel container utilizing glassmorphism visual styling -->
+    <div class="container" id="main-container">
+      <!-- Semantic header component splitting catalog title and addition CTA button -->
+      <header id="site-header">
+        <!-- Render catalog title with beautiful gradient text effect -->
+        <h1 id="page-title">My Bookshelf</h1>
+        <!-- CTA button pointing to addition route page, styled beautifully as premium primary button -->
+        <a href="{{ url_for('add') }}" class="btn btn-primary" id="add-book-cta">Add New Book</a>
+      </header>
+
+      <!-- Main container displaying content and database records -->
+      <main id="main-content">
+        <!-- Capture and render status/validation alerts using Jinja2 flash engine blocks -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          <!-- Check if messages list contains any alert logs from request context -->
+          {% if messages %}
+            <!-- Outer containment grouping alerts -->
+            <div class="alert-container" id="alert-messages-block">
+              <!-- Loop over flashed messages, unpacking categorisation class and messaging contents -->
+              {% for category, message in messages %}
+                <!-- Render alert box labeled with categories class names (e.g. error, success) -->
+                <div class="alert alert-{{ category }}" role="alert">
+                  {{ message }}
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <!-- Semantic section holding catalog index details -->
+        <section id="library-section">
+          <!-- Jinja2 logic assessing whether books collection matches an empty array state -->
+          {% if books == [] %}
+            <!-- Show clean stylized visual placeholder informing user that database is empty -->
+            <div class="empty-state" id="empty-library-state">
+              <p>Your library is currently empty. Start adding some books to build your shelf!</p>
+            </div>
+          {% else %}
+            <!-- Render books list inside modern CSS grid structure -->
+            <ul class="books-list" id="books-grid">
+              <!-- Loop through every book record fetched from SQLite by SQLAlchemy controller -->
+              {% for book in books %}
+                <!-- Responsive list item card presenting key details and quick actions -->
+                <li class="book-card" id="book-card-{{ book.id }}">
+                  <!-- Group containing literary properties (title, author, score metrics) -->
+                  <div class="book-info">
+                    <!-- Bold title styling for core readability -->
+                    <span class="book-title">{{ book.title }}</span>
+                    <!-- Faded italicised label for writing author -->
+                    <span class="book-author">by {{ book.author }}</span>
+                    <!-- Metabar styling enclosing the HSL colored rating badge -->
+                    <div class="book-meta">
+                      <span class="rating-badge">{{ book.rating }} / 10</span>
+                    </div>
+                  </div>
+                  <!-- Inline group rendering update/removal action anchors -->
+                  <div class="book-actions">
+                    <!-- Action anchor pointing to edit routing context with the current book ID payload -->
+                    <a href="{{ url_for('edit', id=book.id) }}" class="action-link action-edit" id="edit-btn-{{ book.id }}">Edit Rating</a>
+                    <!-- Action anchor pointing to delete route context with current book ID payload -->
+                    <a href="{{ url_for('delete', id=book.id) }}" class="action-link action-delete" id="delete-btn-{{ book.id }}" onclick="return confirm('Are you sure you want to delete this book?');">Delete</a>
+                  </div>
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
